@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/bottom_navigation_search"
+        android:icon="@drawable/selector_search"
+        android:title="@string/search"
+        />
+    <item
+        android:id="@+id/bottom_navigation_bookmark"
+        android:icon="@drawable/selector_bookmark_false"
+        android:title="@string/bookmark" />
+    <item
+        android:id="@+id/bottom_navigation_profil"
+        android:icon="@drawable/selector_profil"
+        android:title="@string/profil" />
+</menu>
