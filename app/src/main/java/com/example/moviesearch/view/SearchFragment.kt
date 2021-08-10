@@ -37,7 +37,6 @@ class SearchFragment : Fragment() {
     private var param2: String? = null
 
     private val customHandler = CustomHandler()
-    private val customHandlerOne = CustomHandler()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,13 +62,12 @@ class SearchFragment : Fragment() {
         val customResponse = CustomResponse()
 
         customHandler.initHandler()
-        customHandlerOne.initHandler()
 
         listMovie = BoottomNavigationVA2ViewModels.customMutListData
         //рекуклер
         val recyclerView: RecyclerView? = view.findViewById(R.id.RecyclerviewFSList)
         recyclerView?.layoutManager = LinearLayoutManager(view.context)
-        recyclerView?.adapter = CustomRecyclerAdapter_search(requireActivity(),"", listMovie)
+        recyclerView?.adapter = CustomRecyclerAdapter_search(requireActivity(), BoottomNavigationVA2ViewModels.textSearch, listMovie)
         // recyclerView.adapter = CustomRecyclerAdapter_search(listMovie)
 
 
@@ -94,6 +92,7 @@ class SearchFragment : Fragment() {
                             BoottomNavigationVA2ViewModels.customMutListData
                         )
                     imageButtonSearch.isEnabled = true
+                    BoottomNavigationVA2ViewModels.textSearch = editTextSearch?.text.toString()
                 }
             }, 500)
         }
@@ -112,8 +111,7 @@ class SearchFragment : Fragment() {
     }
 
     override fun onDetach() {
-        customHandler.quit(false)
-        customHandlerOne.quit(false)
+        customHandler.quit(true)
         super.onDetach()
     }
 

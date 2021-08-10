@@ -31,6 +31,9 @@ object BoottomNavigationVA2ViewModels : ViewModel() {
     // передача данных при нажатии, сохранять не нужно
     var viewElementMov = CustomSearch ("","","","","",false)
 
+    // текст поиска
+    var textSearch = ""
+
     //*************************************
     //Получение всех жанных
     fun update(checkedButtonMenu: Int, saveListMovie: MutableList<CustomSearch>) {
@@ -63,8 +66,13 @@ object BoottomNavigationVA2ViewModels : ViewModel() {
     }
 
     //удаление из сохраненного списа
-    fun delitListSaveData(SaveData: CustomSearch) {
-        saveListMovie.remove(SaveData)
+    fun delitListSaveData(saveData: CustomSearch) {
+        // не корректно работает с новым запросом, для корректной работы необходимо
+        // 1. Вычислить похожий массив и его индекс
+        // 2. Сохранить массив и его индекс
+        // 3. Удалить элемент по индексу по массиву
+        val element =  saveListMovie.find { it.imdbID== saveData.imdbID }
+        saveListMovie.removeAt(saveListMovie.indexOf(element))
     }
 
     //изменение значения flag похожего элемента на аналогичный, взвращает значение флага true/false

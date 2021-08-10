@@ -63,14 +63,14 @@ class CustomRecyclerAdapter_search(
         listMovie[position].flag =
             BoottomNavigationVA2ViewModels.editSimilarity(listMovie[position])
 
-        //рисую флажок
+        //рисую флажок  в зависимости от значения в массиве
         if (listMovie[position].flag) {
             holder.imageViewSave?.setImageResource(R.drawable.ic_bookmark_true)
         } else {
             holder.imageViewSave?.setImageResource(R.drawable.ic_bi_bookmark_false)
         }
 
-        //проверяю последний ли это элемент
+        //проверяю последний ли это элемент, для совершеня плагинации
         if (position == listMovie.size - 1) {
             BoottomNavigationVA2ViewModels.addPage()
             page = BoottomNavigationVA2ViewModels.page
@@ -89,12 +89,13 @@ class CustomRecyclerAdapter_search(
             customHandler.quit(true)
         }
 
-
+        // обработка нажатия на эдемент
         holder.imageViewBackgraund?.setOnClickListener {
             BoottomNavigationVA2ViewModels.viewElementMov = listMovie[position]
             loadFragment()
         }
 
+        // обработка нажатия на картинку сохранить (добавить или удалить из заметок)
         holder.imageViewSave?.setOnClickListener {
             if (listMovie[position].flag) {
                 listMovie[position].flag = false

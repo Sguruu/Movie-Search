@@ -178,14 +178,14 @@ class BottomNavigationViewActivity2 : AppCompatActivity() {
             }
             4 -> {
                 textViewTextToolBar.setText(R.string.film)
-                bottomNavigationView.menu.findItem(R.id.bottom_navigation_profil).isVisible = false
-                updCheckedButtonMenu(4)
+             //   bottomNavigationView.menu.findItem(R.id.bottom_navigation_profil).isVisible = false
+              //  updCheckedButtonMenu(4)
                 loadFragment(fragmentProfil)
             }
         }
     }
 
-    //для наружного примененият
+    //для наружного применения
     fun openFragmentProfil(fragment: Fragment) {
         textViewTextToolBar.setText(R.string.film)
         bottomNavigationView.isVisible = false

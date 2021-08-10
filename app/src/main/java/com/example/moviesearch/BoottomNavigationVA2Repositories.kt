@@ -30,7 +30,10 @@ class BoottomNavigationVA2Repositories {
 
     //проверка на схожеть, перед добавлением
     //true - похожи, false нет похожих
-   private fun similarity(elementList: CustomSearch, listSave: MutableList<CustomSearch>):  CustomSearch? {
+    private fun similarity(
+        elementList: CustomSearch,
+        listSave: MutableList<CustomSearch>
+    ): CustomSearch? {
         if (listSave.size != 0) {
             // возвращает индекс похожего элемента, если его нету возвращает null
             val similarity = listSave.find { it.imdbID == elementList.imdbID }
@@ -43,16 +46,15 @@ class BoottomNavigationVA2Repositories {
     }
 
     //изменение значения flag похожего элемента на аналогичный, взвращает значение флага
-    fun editSimilarity(elementList: CustomSearch, listSave: MutableList<CustomSearch>):Boolean{
-       val result = similarity(elementList,listSave)
-        if (result!=null){
+    fun editSimilarity(elementList: CustomSearch, listSave: MutableList<CustomSearch>): Boolean {
+        val result = similarity(elementList, listSave)
+        if (result != null) {
             elementList.flag = true
             return true
         }
         elementList.flag = false
         return false
     }
-
 
 
 }
