@@ -13,10 +13,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MovieSearch"
 
-        android:usesCleartextTraffic="true"
-        >
-        <activity android:name=".BottomNavigationViewActivity2"></activity>
-        <activity android:name=".MainActivity">
+        android:usesCleartextTraffic="true">
+        <activity
+            android:name=".BottomNavigationViewActivity2"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

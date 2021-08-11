@@ -67,7 +67,11 @@ class SearchFragment : Fragment() {
         //рекуклер
         val recyclerView: RecyclerView? = view.findViewById(R.id.RecyclerviewFSList)
         recyclerView?.layoutManager = LinearLayoutManager(view.context)
-        recyclerView?.adapter = CustomRecyclerAdapter_search(requireActivity(), BoottomNavigationVA2ViewModels.textSearch, listMovie)
+        recyclerView?.adapter = CustomRecyclerAdapter_search(
+            requireActivity(),
+            BoottomNavigationVA2ViewModels.textSearch,
+            listMovie
+        )
         // recyclerView.adapter = CustomRecyclerAdapter_search(listMovie)
 
 
@@ -81,18 +85,21 @@ class SearchFragment : Fragment() {
                 BoottomNavigationVA2ViewModels.newResponsData(listMovieHandler)
 
                 customHandler.mainHandler.post {
-                    Log.d(
-                        "fun",
-                        "fun setOnClickListener ${BoottomNavigationVA2ViewModels.customMutListData}"
-                    )
-                    recyclerView?.adapter =
-                        CustomRecyclerAdapter_search(
-                            requireActivity(),
-                            editTextSearch?.text.toString(),
-                            BoottomNavigationVA2ViewModels.customMutListData
+                    if (activity != null) {
+                      //  (activity as BottomNavigationViewActivity2).customViewModel.checkedButtonMenu
+                        Log.d(
+                            "fun",
+                            "fun setOnClickListener ${BoottomNavigationVA2ViewModels.customMutListData}"
                         )
-                    imageButtonSearch.isEnabled = true
-                    BoottomNavigationVA2ViewModels.textSearch = editTextSearch?.text.toString()
+                        recyclerView?.adapter =
+                            CustomRecyclerAdapter_search(
+                                requireActivity(),
+                                editTextSearch?.text.toString(),
+                                BoottomNavigationVA2ViewModels.customMutListData
+                            )
+                        imageButtonSearch.isEnabled = true
+                        BoottomNavigationVA2ViewModels.textSearch = editTextSearch?.text.toString()
+                    }
                 }
             }, 500)
         }
@@ -110,8 +117,13 @@ class SearchFragment : Fragment() {
         super.onAttach(context)
     }
 
-    override fun onDetach() {
+    override fun onDestroyView() {
         customHandler.quit(true)
+        super.onDestroyView()
+    }
+
+    override fun onDetach() {
+
         super.onDetach()
     }
 
