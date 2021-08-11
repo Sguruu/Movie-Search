@@ -9,8 +9,12 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moviesearch.*
@@ -37,6 +41,7 @@ class SearchFragment : Fragment() {
     private var param2: String? = null
 
     private val customHandler = CustomHandler()
+    private val customViewModel: BoottomNavigationVA2ViewModels by activityViewModels()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,6 +49,13 @@ class SearchFragment : Fragment() {
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
+        }
+        val ld = LD ()
+
+        var testLiveData = ""
+        ld.text().observe(this) {
+            testLiveData = it
+            Log.d("LiveData", " запуск подписчика Фрагмент it = $it")
         }
     }
 
@@ -63,16 +75,20 @@ class SearchFragment : Fragment() {
 
         customHandler.initHandler()
 
-        listMovie = BoottomNavigationVA2ViewModels.customMutListData
+        listMovie = customViewModel.customMutListData
         //рекуклер
         val recyclerView: RecyclerView? = view.findViewById(R.id.RecyclerviewFSList)
         recyclerView?.layoutManager = LinearLayoutManager(view.context)
         recyclerView?.adapter = CustomRecyclerAdapter_search(
             requireActivity(),
-            BoottomNavigationVA2ViewModels.textSearch,
+            customViewModel.textSearch,
             listMovie
         )
         // recyclerView.adapter = CustomRecyclerAdapter_search(listMovie)
+
+        Log.d("test", "SearchFragment onCreateView test = ${customViewModel.test}")
+        customViewModel.test = customViewModel.test+1
+        Log.d("test", "SearchFragment onCreateView test +  1= ${customViewModel.test}")
 
 
         Log.d("fun", "fun  onCreateView")
@@ -82,23 +98,23 @@ class SearchFragment : Fragment() {
             customHandler.handler.postDelayed({
                 val listMovieHandler: List<DataList> =
                     customResponse.responseMovie(editTextSearch?.text.toString(), "1")
-                BoottomNavigationVA2ViewModels.newResponsData(listMovieHandler)
+                customViewModel.newResponsData(listMovieHandler)
 
                 customHandler.mainHandler.post {
                     if (activity != null) {
                       //  (activity as BottomNavigationViewActivity2).customViewModel.checkedButtonMenu
                         Log.d(
                             "fun",
-                            "fun setOnClickListener ${BoottomNavigationVA2ViewModels.customMutListData}"
+                            "fun setOnClickListener ${customViewModel.customMutListData}"
                         )
                         recyclerView?.adapter =
                             CustomRecyclerAdapter_search(
                                 requireActivity(),
                                 editTextSearch?.text.toString(),
-                                BoottomNavigationVA2ViewModels.customMutListData
+                                customViewModel.customMutListData
                             )
                         imageButtonSearch.isEnabled = true
-                        BoottomNavigationVA2ViewModels.textSearch = editTextSearch?.text.toString()
+                        customViewModel.textSearch = editTextSearch?.text.toString()
                     }
                 }
             }, 500)

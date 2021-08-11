@@ -5,18 +5,12 @@ import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.Menu
-import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import androidx.core.view.marginEnd
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.example.moviesearch.data.CustomListSearch
 import com.example.moviesearch.data.CustomSearch
 import com.example.moviesearch.view.ProfilFragment
@@ -32,16 +26,17 @@ class BottomNavigationViewActivity2 : AppCompatActivity() {
     private val APP_PREFERENCES = "ActivitiMovie"
     private val APP_PREFERENCES_LISTSAVE = "Datalist"
     private val APP_PREFERENCES_VALUEMENU = "checkedButtonMenu"
-    //
 
+    //
     val customHandler = CustomHandler()
 
     //для запоминания выбранного пользователем раздела 1 - 3, другие значения не допускаются
     private var checkedButtonMenu = 3
     private var historyCheckedButtonMenu = checkedButtonMenu
     private lateinit var textViewTextToolBar: TextView
-
+    //
     val customViewModel: BoottomNavigationVA2ViewModels by viewModels()
+    val ld = LD()
 
     lateinit var bottomNavigationView: BottomNavigationView
 
@@ -52,14 +47,13 @@ class BottomNavigationViewActivity2 : AppCompatActivity() {
         val imageButton = findViewById<ImageButton>(R.id.imageButtonABNV2Back)
 
         bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationViewABNV2)
-
+        textViewTextToolBar = findViewById(R.id.textViewABNV2Text)
 
         val fragmentSearch = SearchFragment()
         val fragmentSaves = SavesFragment()
         val fragmentProfil = ProfilFragment()
 
-
-        textViewTextToolBar = findViewById(R.id.textViewABNV2Text)
+        Log.d("fun", "BottomNavigationViewActivity2 fun  onCreateView customViewModel.saveListMovie ${customViewModel.saveListMovie}")
 
         //***Загрузка данных Начало
         prefs = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE)
@@ -78,11 +72,21 @@ class BottomNavigationViewActivity2 : AppCompatActivity() {
             bufListSave.addAll(fromJsonBufListSave.Search)
 
             //выгрузка в нашь объект
-            BoottomNavigationVA2ViewModels.update(bufValueMenu, bufListSave)
+            customViewModel.update(bufValueMenu, bufListSave)
         }
         //***Загрузка данных Конец
 
-        checkedButtonMenu = BoottomNavigationVA2ViewModels.checkedButtonMenu
+        //LiveData Подписки
+        var testLiveData = ""
+        customViewModel.text().observe(this) {
+            testLiveData = it
+            Log.d("LiveData", " запуск подписчика it = $it")
+        }
+
+        customViewModel.checkedButtonMenu().observe(this){
+            checkedButtonMenu = it
+        }
+        //LiveData end
 
         customHandler.initHandler()
 
@@ -94,9 +98,11 @@ class BottomNavigationViewActivity2 : AppCompatActivity() {
             bottomNavigationView
         )
 
-
-
         imageButton.setOnClickListener {
+            //
+            testLiveData += "1"
+            customViewModel.addText(testLiveData)
+            //
             if (checkedButtonMenu == 4) {
                 bottomNavigationView.isVisible = true
             }
@@ -140,6 +146,7 @@ class BottomNavigationViewActivity2 : AppCompatActivity() {
 
     }
 
+
     // функция для добавления фрагмента
     fun loadFragment(fragment: Fragment) {
         val fragmentManager = supportFragmentManager
@@ -178,8 +185,8 @@ class BottomNavigationViewActivity2 : AppCompatActivity() {
             }
             4 -> {
                 textViewTextToolBar.setText(R.string.film)
-             //   bottomNavigationView.menu.findItem(R.id.bottom_navigation_profil).isVisible = false
-              //  updCheckedButtonMenu(4)
+                //   bottomNavigationView.menu.findItem(R.id.bottom_navigation_profil).isVisible = false
+                //  updCheckedButtonMenu(4)
                 loadFragment(fragmentProfil)
             }
         }
@@ -195,11 +202,8 @@ class BottomNavigationViewActivity2 : AppCompatActivity() {
 
     // функция изменения состояния checkedButtonMenu
     fun updCheckedButtonMenu(newCheckedButtonMenu: Int) {
-        //сохранение в памяти
-        BoottomNavigationVA2ViewModels.checkedButtonMenu = newCheckedButtonMenu
-
         historyCheckedButtonMenu = checkedButtonMenu
-        checkedButtonMenu = newCheckedButtonMenu
+        customViewModel.addCheckedButtonMenu(newCheckedButtonMenu)
         Log.d(
             "fun",
             "fun updCheckedButtonMenu : historyCheckedButtonMenu ${historyCheckedButtonMenu}  newCheckedButtonMenu ${checkedButtonMenu}\n"
@@ -209,8 +213,8 @@ class BottomNavigationViewActivity2 : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         //сохранения данных
-        val bufListSave = CustomListSearch(BoottomNavigationVA2ViewModels.saveListMovie)
-        val bufValueMenu = BoottomNavigationVA2ViewModels.checkedButtonMenu
+        val bufListSave = CustomListSearch(customViewModel.saveListMovie)
+        val bufValueMenu = checkedButtonMenu
 
         //конвертирование
         val gson = Gson()

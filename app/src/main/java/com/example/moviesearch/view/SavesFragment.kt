@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moviesearch.BoottomNavigationVA2ViewModels
@@ -32,6 +34,7 @@ class SavesFragment : Fragment() {
     private var param2: String? = null
 
     private val customHandler = CustomHandler()
+    private val customViewModel: BoottomNavigationVA2ViewModels by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,21 +52,13 @@ class SavesFragment : Fragment() {
 // Inflate the layout for this fragment
         customHandler.initHandler()
 
+        Log.d("test", "SavesFragment onCreateView test = ${customViewModel.test}")
+
         val recyclerView: RecyclerView? = view.findViewById(R.id.RecyclerViewSaves)
         recyclerView?.layoutManager = LinearLayoutManager(view.context)
+        Log.d("fun", "SavesFragment fun  onCreateView customViewModel.saveListMovie ${customViewModel.saveListMovie}")
+        recyclerView?.adapter=CustomRecyclerAdapter_save(requireActivity(),customViewModel.saveListMovie)
 
-
-        customHandler.handler.post {
-            val listMovieHandler = BoottomNavigationVA2ViewModels.saveListMovie
-            customHandler.mainHandler.post {
-                Log.d(
-                    "fun",
-                    "fun SavesFragment ${listMovieHandler}"
-                )
-                recyclerView?.adapter =
-                    CustomRecyclerAdapter_save(requireActivity(),listMovieHandler)
-            }
-        }
         return view
     }
 

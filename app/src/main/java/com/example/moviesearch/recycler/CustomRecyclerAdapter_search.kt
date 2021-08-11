@@ -61,7 +61,7 @@ class CustomRecyclerAdapter_search(
 
         //Проверяю на схожеть и устанавливаю значение флага
         listMovie[position].flag =
-            BoottomNavigationVA2ViewModels.editSimilarity(listMovie[position])
+            (context as BottomNavigationViewActivity2).customViewModel.editSimilarity(listMovie[position])
 
         //рисую флажок  в зависимости от значения в массиве
         if (listMovie[position].flag) {
@@ -72,8 +72,8 @@ class CustomRecyclerAdapter_search(
 
         //проверяю последний ли это элемент, для совершеня плагинации
         if (position == listMovie.size - 1) {
-            BoottomNavigationVA2ViewModels.addPage()
-            page = BoottomNavigationVA2ViewModels.page
+            (context as BottomNavigationViewActivity2).customViewModel.addPage()
+            page =  (context as BottomNavigationViewActivity2).customViewModel.page
             customHandler.initHandler()
             customHandler.handler.post {
                 val response = customResponse.responseMovie(textRespons, page.toString())
@@ -81,7 +81,7 @@ class CustomRecyclerAdapter_search(
                     addItem(
                         position,
                         holder = holder,
-                        BoottomNavigationVA2ViewModels.addDataList(response)
+                        (context as BottomNavigationViewActivity2).customViewModel.addDataList(response)
                     )
                 }
             }
@@ -91,7 +91,7 @@ class CustomRecyclerAdapter_search(
 
         // обработка нажатия на эдемент
         holder.imageViewBackgraund?.setOnClickListener {
-            BoottomNavigationVA2ViewModels.viewElementMov = listMovie[position]
+            (context as BottomNavigationViewActivity2).customViewModel.viewElementMov = listMovie[position]
             loadFragment()
         }
 
@@ -99,12 +99,12 @@ class CustomRecyclerAdapter_search(
         holder.imageViewSave?.setOnClickListener {
             if (listMovie[position].flag) {
                 listMovie[position].flag = false
-                BoottomNavigationVA2ViewModels.delitListSaveData(listMovie[position])
+                (context as BottomNavigationViewActivity2).customViewModel.delitListSaveData(listMovie[position])
                 holder.imageViewSave?.setImageResource(R.drawable.ic_bi_bookmark_false)
             } else {
                 holder.imageViewSave?.setImageResource(R.drawable.ic_bookmark_true)
                 listMovie[position].flag = true
-                BoottomNavigationVA2ViewModels.addListSaveData(listMovie[position])
+                (context as BottomNavigationViewActivity2).customViewModel.addListSaveData(listMovie[position])
             }
         }
     }

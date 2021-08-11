@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moviesearch.BoottomNavigationVA2ViewModels
 import com.example.moviesearch.BottomNavigationViewActivity2
@@ -54,7 +55,7 @@ class CustomRecyclerAdapter_save(
         }
 
         holder.imageViewBack?.setOnClickListener {
-            BoottomNavigationVA2ViewModels.viewElementMov = listSaveMovie[position]
+            (context as BottomNavigationViewActivity2).customViewModel.viewElementMov = listSaveMovie[position]
             loadFragment()
         }
 
@@ -88,6 +89,7 @@ class CustomRecyclerAdapter_save(
     }
     // функция для добавления фрагмента
     private fun loadFragment() {
+        // для запуска метода
         (context as BottomNavigationViewActivity2).openFragmentProfil(fragment)
     }
 }

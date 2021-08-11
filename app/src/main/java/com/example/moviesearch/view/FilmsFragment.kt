@@ -9,6 +9,8 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import com.example.moviesearch.BoottomNavigationVA2ViewModels
 import com.example.moviesearch.R
 import com.squareup.picasso.Picasso
@@ -27,6 +29,8 @@ class FilmsFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+
+    private val customViewModel: BoottomNavigationVA2ViewModels by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,22 +51,22 @@ class FilmsFragment : Fragment() {
         val textViewType = view.findViewById<TextView>(R.id.textViewFragmentFilmsType)
         val buttonSave = view.findViewById<Button>(R.id.bottomFragmentFilms)
 
-        Picasso.get().load(BoottomNavigationVA2ViewModels.viewElementMov.Poster)
+        Picasso.get().load(customViewModel.viewElementMov.Poster)
             .into(imageViewPoster)
-        textViewTitle.text = BoottomNavigationVA2ViewModels.viewElementMov.Title
-        textViewYear.text = BoottomNavigationVA2ViewModels.viewElementMov.Year
-        textViewType.text = BoottomNavigationVA2ViewModels.viewElementMov.Type
+        textViewTitle.text = customViewModel.viewElementMov.Title
+        textViewYear.text = customViewModel.viewElementMov.Year
+        textViewType.text = customViewModel.viewElementMov.Type
 
         buttonSave.setOnClickListener {
-            if (BoottomNavigationVA2ViewModels.viewElementMov.flag) {
+            if (customViewModel.viewElementMov.flag) {
                 Toast.makeText(requireActivity(), "Данный фильм уже сохранен", Toast.LENGTH_LONG)
                     .show()
             } else {
-                BoottomNavigationVA2ViewModels.viewElementMov.flag = true
-                BoottomNavigationVA2ViewModels.addListSaveData(BoottomNavigationVA2ViewModels.viewElementMov)
+                customViewModel.viewElementMov.flag = true
+                customViewModel.addListSaveData(customViewModel.viewElementMov)
                 Toast.makeText(
                     requireActivity(),
-                    "Фильм добавлен в закладки ${BoottomNavigationVA2ViewModels.viewElementMov.Title}",
+                    "Фильм добавлен в закладки ${customViewModel.viewElementMov.Title}",
                     Toast.LENGTH_LONG
                 ).show()
             }

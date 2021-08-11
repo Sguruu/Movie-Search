@@ -1,11 +1,14 @@
 package com.example.moviesearch
 
-import android.icu.text.CaseMap
+import android.R.attr.data
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.moviesearch.data.CustomSearch
 import com.example.moviesearch.data.DataList
 
-object BoottomNavigationVA2ViewModels : ViewModel() {
+
+class BoottomNavigationVA2ViewModels : ViewModel() {
     private val repository = BoottomNavigationVA2Repositories()
 
     //черновые данные с запроса, сохранять не нужно
@@ -21,23 +24,41 @@ object BoottomNavigationVA2ViewModels : ViewModel() {
         private set
 
     //для запоминания выбранного пользователем раздела 1 - 3, другие значения не допускаются
-    var checkedButtonMenu = 1
-     //   private set
+    // его нужно запонмить
+    private val checkedButtonMenu = MutableLiveData<Int>(3)
+    fun checkedButtonMenu(): LiveData<Int> = checkedButtonMenu
+    fun addCheckedButtonMenu(newCheckedButtonMenu:Int){
+        checkedButtonMenu.postValue(newCheckedButtonMenu)
+    }
+
 
     //выбор текущего номера страницы запроса
     var page = 1
         private set
 
     // передача данных при нажатии, сохранять не нужно
-    var viewElementMov = CustomSearch ("","","","","",false)
+    var viewElementMov = CustomSearch("", "", "", "", "", false)
 
     // текст поиска
     var textSearch = ""
 
+    var test = 1
+
+    //LiveData эксперемент
+    private val textTest = MutableLiveData<String>()
+
+    //функция для подписки
+    fun text(): LiveData<String> = textTest
+
+    //добавление
+    fun addText(newText:String){
+        textTest.postValue(newText)
+    }
+
     //*************************************
-    //Получение всех жанных
+    //Получение всех данных
     fun update(checkedButtonMenu: Int, saveListMovie: MutableList<CustomSearch>) {
-        this.checkedButtonMenu = checkedButtonMenu
+        this.checkedButtonMenu.value = checkedButtonMenu
         this.saveListMovie = saveListMovie
     }
 
@@ -71,7 +92,7 @@ object BoottomNavigationVA2ViewModels : ViewModel() {
         // 1. Вычислить похожий массив и его индекс
         // 2. Сохранить массив и его индекс
         // 3. Удалить элемент по индексу по массиву
-        val element =  saveListMovie.find { it.imdbID== saveData.imdbID }
+        val element = saveListMovie.find { it.imdbID == saveData.imdbID }
         saveListMovie.removeAt(saveListMovie.indexOf(element))
     }
 
